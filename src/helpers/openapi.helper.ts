@@ -123,7 +123,9 @@ const updateEventFromOpenAPI = async () => {
 };
 
 const runDaemon = async () => {
+  console.log("Wait for initializing...");
   await updateEventFromOpenAPI();
+  console.log("Initialized");
   setInterval(async () => {
     try {
       await updateEventFromOpenAPI();

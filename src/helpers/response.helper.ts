@@ -1,3 +1,5 @@
+import { NextFunction, Request, Response } from "express";
+
 class HttpResponse {
   status: number;
   data: string | object;
@@ -7,8 +9,12 @@ class HttpResponse {
   }
 }
 
-const errorHandler = (err, req, res, next) => {
-  console.log(err);
+const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (err instanceof HttpResponse) {
     res.status(err.status);
     if (typeof err.data === "string") {
@@ -17,6 +23,7 @@ const errorHandler = (err, req, res, next) => {
     return res.json(err.data);
   }
 
+  console.log(err);
   return res.status(500).send("Internal Server Error");
 };
 

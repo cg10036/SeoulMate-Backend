@@ -1,14 +1,62 @@
-import { validate } from "class-validator";
+import { validateOrReject } from "class-validator";
+import { plainToClass } from "class-transformer";
+import { NextFunction, Request, Response } from "express";
 
-const validateBody = async (type: any) => {
-  return async (req: any, res: any, next: any) => {
-    const errors = await validate(Object.assign(new type(), req.body));
-    if (errors.length > 0) {
-      res.status(400).send(errors);
-    } else {
+const validateBody = (schema: { new (): any }) => {
+  return async (
+    req: Request<any, any, any, any>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      let body = plainToClass(schema, req.body);
+      await validateOrReject(body, {
+        forbidUnknownValues: true,
+      });
+      req.body = body;
       next();
+    } catch (err) {
+      res.status(400).json({ err });
     }
   };
 };
 
-export { validateBody };
+const validateQuery = (schema: { new (): any }) => {
+  return async (
+    req: Request<any, any, any, any>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      let query = plainToClass(schema, req.query);
+      await validateOrReject(query, {
+        forbidUnknownValues: true,
+      });
+      req.query = query;
+      next();
+    } catch (err) {
+      res.status(400).json({ err });
+    }
+  };
+};
+
+const validateParams = (schema: { new (): any }) => {
+  return async (
+    req: Request<any, any, any, any>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      let params = plainToClass(schema, req.params);
+      await validateOrReject(params, {
+        forbidUnknownValues: true,
+      });
+      req.params = params;
+      next();
+    } catch (err) {
+      res.status(400).json({ err });
+    }
+  };
+};
+
+export { validateBody, validateQuery, validateParams };
