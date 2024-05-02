@@ -8,12 +8,15 @@ const getEvents = async () => {
 };
 
 const getCategory = async () => {
-  const category = await Event.find({ select: ["category"] });
-  const result = Array.from(
-    new Set(category.map((category) => category.category))
+  let data: { category: string }[] = await Event.createQueryBuilder("event")
+    .select("category")
+    .distinctOn(["category"])
+    .orderBy("category")
+    .getRawMany();
+  return new HttpResponse(
+    200,
+    data.map((e) => e.category)
   );
-
-  return new HttpResponse(200, result);
 };
 
 const getCategoryEvents = async (category) => {
@@ -28,14 +31,25 @@ const getEvent = async (eventId) => {
 };
 
 const addComment = async (eventId, name, password, content) => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  await Comment.insert({ eventId, name, password: hashedPassword, content });
+  await Comment.insert({
+    eventId,
+    name,
+    password: await bcrypt.hash(password, 10),
+    content,
+  });
   return new HttpResponse(201, "Comment added");
 };
 
 const getEventComments = async (eventId) => {
-  console.log(await Comment.find({ where: { eventId } }[0]));
-  return new HttpResponse(200, await Comment.find({ where: { eventId } }));
+  return new HttpResponse(
+    200,
+    await Comment.find({
+      where: {
+        eventId,
+      },
+      order: { createdAt: "ASC" },
+    })
+  );
 };
 
 const editComment = async (eventId, commentId, content, password) => {
