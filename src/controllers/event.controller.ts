@@ -13,7 +13,7 @@ const getEvents = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getCategory = async (req: Request, res: Response, next: NextFunction) => {
-  // next(await eventService.getCategory())
+  next(await eventService.getCategory());
 };
 
 const getCategoryEvents = async (
@@ -22,7 +22,7 @@ const getCategoryEvents = async (
   next: NextFunction
 ) => {
   let { category } = req.params;
-  // next(await eventService.getCategoryEvents(category))
+  next(await eventService.getCategoryEvents(category));
 };
 
 const getEvent = async (
@@ -31,7 +31,7 @@ const getEvent = async (
   next: NextFunction
 ) => {
   let { eventId } = req.params;
-  // next(await eventService.getEvent(eventId))
+  next(await eventService.getEvent(eventId));
 };
 
 const getEventComments = async (
@@ -40,7 +40,7 @@ const getEventComments = async (
   next: NextFunction
 ) => {
   let { eventId } = req.params;
-  // next(await eventService.getEventComments(eventId))
+  next(await eventService.getEventComments(eventId));
 };
 
 const addComment = async (
@@ -50,7 +50,7 @@ const addComment = async (
 ) => {
   let { eventId } = req.params;
   let { name, password, content } = req.body;
-  // next(await eventService.addComment(eventId, name, password, content))
+  next(await eventService.addComment(eventId, name, password, content));
 };
 
 const editComment = async (
@@ -60,7 +60,7 @@ const editComment = async (
 ) => {
   let { eventId, commentId } = req.params;
   let { content, password } = req.body;
-  // next(await eventService.editComment(eventId, commentId, content, password))
+  next(await eventService.editComment(eventId, commentId, content, password));
 };
 
 const deleteComment = async (
@@ -70,7 +70,7 @@ const deleteComment = async (
 ) => {
   let { eventId, commentId } = req.params;
   let { password } = req.body;
-  // next(await eventService.deleteComment(eventId, commentId, password))
+  next(await eventService.deleteComment(eventId, commentId, password));
 };
 
 export default {
