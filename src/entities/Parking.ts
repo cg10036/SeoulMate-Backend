@@ -11,6 +11,9 @@ export class Parking extends BaseEntity {
   @Column("text")
   address: string; // ADDR
 
+  @Column("integer")
+  ruleCode: number; // OPERATION_RULE
+
   @Column("text")
   rule: string; // OPERATION_RULE_NM
 

@@ -41,9 +41,10 @@ interface ParkInfoData {
   PARKING_CODE: string;
   PARKING_NAME: string;
   ADDR: string;
+  OPERATION_RULE: string;
   OPERATION_RULE_NM: string;
-  LAT: string;
-  LNG: string;
+  LAT: number;
+  LNG: number;
 }
 
 interface GetParkInfo {
@@ -151,9 +152,10 @@ const getParkingFromOpenAPI = async (): Promise<ParkInfoData[]> => {
             e.PARKING_CODE &&
             e.PARKING_NAME &&
             e.ADDR &&
+            e.OPERATION_RULE &&
             e.OPERATION_RULE_NM &&
-            isFloat(e.LAT) &&
-            isFloat(e.LNG)
+            e.LAT &&
+            e.LNG
         )
     );
   }
@@ -208,9 +210,10 @@ const updateParkingFromOpenAPI = async () => {
       parking.id = id;
       parking.name = e.PARKING_NAME;
       parking.address = e.ADDR;
+      parking.ruleCode = Number.parseInt(e.OPERATION_RULE);
       parking.rule = e.OPERATION_RULE_NM;
-      parking.latitude = e.LAT;
-      parking.longitude = e.LNG;
+      parking.latitude = "" + e.LAT;
+      parking.longitude = "" + e.LNG;
 
       await Parking.upsert(parking, { conflictPaths: { id: true } });
     })
