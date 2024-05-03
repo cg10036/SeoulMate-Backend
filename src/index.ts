@@ -13,7 +13,11 @@ AppDataSource.initialize().then(async () => {
 
   const app = express();
   app.use(express.json());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: ["https://seoulmate.kookm.in", "http://localhost:3000"],
+    })
+  );
 
   app.use(routes);
 
