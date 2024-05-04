@@ -2,6 +2,7 @@ import { HttpResponse } from "../helpers/response.helper";
 import { Event } from "../entities/Event";
 import { Comment } from "../entities/Comment";
 import * as bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 const getEvents = async () => {
   return new HttpResponse(200, await Event.find());
@@ -31,6 +32,22 @@ const getEvent = async (eventId) => {
 };
 
 const addComment = async (eventId, name, password, content) => {
+  try {
+    let controller = new AbortController();
+    let timeout = setTimeout(() => controller.abort(), 5000);
+    let resp = await fetch(process.env.AI_API_URL, {
+      signal: controller.signal,
+      method: "POST",
+      body: content,
+    });
+    clearTimeout(timeout);
+    let { result } = await resp.json();
+    if (result) {
+      return new HttpResponse(403, "Comment contains inappropriate content");
+    }
+  } catch (err) {
+    console.log(err);
+  }
   await Comment.insert({
     eventId,
     name,
