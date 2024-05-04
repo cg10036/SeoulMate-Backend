@@ -1,4 +1,5 @@
-import { IsString, Length } from "class-validator";
+import { Type } from "class-transformer";
+import { IsInt, IsString, Length } from "class-validator";
 
 export class CategoryParamsValidator {
   @IsString()
@@ -6,13 +7,15 @@ export class CategoryParamsValidator {
 }
 
 export class EventParamsValidator {
-  @IsString()
-  eventId: string;
+  @IsInt()
+  @Type(() => Number)
+  eventId: number;
 }
 
 export class CommentParamsValidator extends EventParamsValidator {
-  @IsString()
-  commentId: string;
+  @IsInt()
+  @Type(() => Number)
+  commentId: number;
 }
 
 export class NewCommentBodyValidator {
