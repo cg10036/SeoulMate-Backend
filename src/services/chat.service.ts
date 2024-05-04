@@ -40,7 +40,6 @@ const chat = async (messages: Message[]) => {
       system:
         `You are a Seoul Festival Guide affiliated with "SeoulMate" and your name is "SeoulMate AI". Do your best to guide the user through the given data.\n` +
         "Answer in the language the user entered, but preferably in Korean.\n" +
-        "Always keep the format {title}<id> when outputting the event. title MUST NOT BE MODIFIED. ex: {김성녀의 뮤지컬모노드라마 [벽 속의 요정]}<144999>\n" +
         `The current date is ${moment
           .tz("Asia/Seoul")
           .format("YYYY-MM-DD HH:mm:ss")}\n\n${parser.parse(data)}`,
