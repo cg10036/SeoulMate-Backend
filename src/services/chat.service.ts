@@ -12,7 +12,7 @@ const chat = async (messages: Message[]) => {
     "title",
     // "category",
     // "price",
-    "isFree",
+    // "isFree",
     "start",
     "end",
     // "target",
@@ -20,6 +20,7 @@ const chat = async (messages: Message[]) => {
   ];
   let data = await Event.find({
     where: {
+      title: new FindOperator("like", "[%"),
       end: new FindOperator("moreThanOrEqual", new Date()),
     },
   });
