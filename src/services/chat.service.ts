@@ -10,13 +10,13 @@ const chat = async (messages: Message[]) => {
   let fields = [
     "id",
     "title",
-    // "category",
-    // "price",
+    "category",
+    "price",
     "isFree",
     "start",
     "end",
-    // "target",
-    // "place",
+    "target",
+    "place",
   ];
   let data = await Event.find({
     where: {
@@ -47,6 +47,7 @@ const chat = async (messages: Message[]) => {
     }),
   });
   let json = await resp.json();
+  console.log(json);
   return new HttpResponse(200, {
     role: json.role,
     content: json.content[0].text,
