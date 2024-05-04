@@ -5,7 +5,12 @@ import * as bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
 const getEvents = async () => {
-  return new HttpResponse(200, await Event.find());
+  return new HttpResponse(
+    200,
+    await Event.query(
+      `select "event".*, coalesce("comment"."count", 0) as "comment" from "event" left join (select "eventId", COUNT(*)::int as "count" from "comment" group by "eventId") as "comment" on "event"."id"="comment"."eventId"`
+    )
+  );
 };
 
 const getCategory = async () => {
@@ -23,12 +28,25 @@ const getCategory = async () => {
 const getCategoryEvents = async (category) => {
   return new HttpResponse(
     200,
-    await Event.find({ where: { category: category } })
+    // await Event.find({ where: { category: category } })
+    await Event.query(
+      `select "event".*, coalesce("comment"."count", 0) as "comment" from "event" left join (select "eventId", COUNT(*)::int as "count" from "comment" group by "eventId") as "comment" on "event"."id"="comment"."eventId" WHERE "event"."category"=$1`,
+      [category]
+    )
   );
 };
 
 const getEvent = async (eventId) => {
-  return new HttpResponse(200, await Event.findOne({ where: { id: eventId } }));
+  return new HttpResponse(
+    200,
+    // await Event.findOne({ where: { id: eventId } })
+    (
+      await Event.query(
+        `select "event".*, coalesce("comment"."count", 0) as "comment" from "event" left join (select "eventId", COUNT(*)::int as "count" from "comment" group by "eventId") as "comment" on "event"."id"="comment"."eventId" WHERE "id"=$1 LIMIT 1`,
+        [eventId]
+      )
+    )[0]
+  );
 };
 
 const addComment = async (eventId, name, password, content) => {
