@@ -7,6 +7,7 @@ import {
   EditCommentBodyValidator,
   EventParamsValidator,
   NewCommentBodyValidator,
+  PasswordBodyValidator,
 } from "../validators/event.validator";
 import eventController from "../controllers/event.controller";
 
@@ -37,6 +38,12 @@ router.post(
   validateBody(NewCommentBodyValidator),
   eventController.addComment
 ); // 행사에 댓글 추가
+router.post(
+  "/:eventId/comment/:commentId",
+  validateParams(CommentParamsValidator),
+  validateBody(PasswordBodyValidator),
+  eventController.checkPassword
+); // 댓글 비밀번호 확인
 router.patch(
   "/:eventId/comment/:commentId",
   validateParams(CommentParamsValidator),

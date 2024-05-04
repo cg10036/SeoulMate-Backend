@@ -64,9 +64,22 @@ const getEventComments = async (eventId) => {
       where: {
         eventId,
       },
+      select: ["id", "createdAt", "eventId", "name", "content"],
       order: { createdAt: "ASC" },
     })
   );
+};
+
+const checkPassword = async (eventId, commentId, password) => {
+  const comment = await Comment.findOne({ where: { id: commentId } });
+  if (!comment) {
+    return new HttpResponse(404, "Comment not found");
+  } // 해당 하는 댓글이 없는 경우
+  if (!(await bcrypt.compare(password, comment.password))) {
+    return new HttpResponse(401, "Password not correct");
+  } // 입력한 비밀번호가 일치하지 않은 경우
+
+  return new HttpResponse(200, "Password correct");
 };
 
 const editComment = async (eventId, commentId, content, password) => {
@@ -104,6 +117,7 @@ export default {
   getEvent,
   addComment,
   getEventComments,
+  checkPassword,
   editComment,
   deleteComment,
   getCategoryEvents,

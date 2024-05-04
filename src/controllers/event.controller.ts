@@ -5,6 +5,7 @@ import {
   EditCommentBodyValidator,
   EventParamsValidator,
   NewCommentBodyValidator,
+  PasswordBodyValidator,
 } from "../validators/event.validator";
 import eventService from "../services/event.service";
 
@@ -53,6 +54,16 @@ const addComment = async (
   next(await eventService.addComment(eventId, name, password, content));
 };
 
+const checkPassword = async (
+  req: Request<CommentParamsValidator, any, PasswordBodyValidator>,
+  res: Response,
+  next: NextFunction
+) => {
+  let { eventId, commentId } = req.params;
+  let { password } = req.body;
+  next(await eventService.checkPassword(eventId, commentId, password));
+};
+
 const editComment = async (
   req: Request<CommentParamsValidator, any, EditCommentBodyValidator>,
   res: Response,
@@ -80,6 +91,7 @@ export default {
   getEvent,
   getEventComments,
   addComment,
+  checkPassword,
   editComment,
   deleteComment,
 };

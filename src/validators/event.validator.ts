@@ -38,3 +38,8 @@ export class DeleteCommentBodyValidator {
   @IsString()
   password: string;
 }
+
+export class PasswordBodyValidator {
+  @IsString()
+  password: string;
+}
