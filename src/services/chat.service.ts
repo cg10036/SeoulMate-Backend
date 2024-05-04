@@ -10,13 +10,13 @@ const chat = async (messages: Message[]) => {
   let fields = [
     "id",
     "title",
-    "category",
-    "price",
+    // "category",
+    // "price",
     "isFree",
     "start",
     "end",
     "target",
-    "place",
+    // "place",
   ];
   let data = await Event.find({
     where: {
