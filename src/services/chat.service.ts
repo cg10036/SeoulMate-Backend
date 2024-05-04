@@ -15,7 +15,7 @@ const chat = async (messages: Message[]) => {
     "isFree",
     "start",
     "end",
-    "target",
+    // "target",
     // "place",
   ];
   let data = await Event.find({
