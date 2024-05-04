@@ -178,15 +178,15 @@ const updateEventFromOpenAPI = async () => {
 
       event.id = id;
       event.title = e.TITLE;
-      event.category = e.CODENAME;
+      event.category = e.CODENAME.replaceAll("/", "+");
       event.organization = e.ORG_NAME;
       event.price = e.USE_FEE;
       event.isFree = e.IS_FREE === "무료";
       event.image = e.MAIN_IMG;
       event.start = new Date(e.STRTDATE);
       event.end = new Date(e.END_DATE);
-      event.latitude = e.LAT;
-      event.longitude = e.LOT;
+      event.latitude = e.LOT; // openapi issue
+      event.longitude = e.LAT; // openapi issue
       event.target = e.USE_TRGT;
       event.place = e.PLACE;
       event.url = e.HMPG_ADDR;
